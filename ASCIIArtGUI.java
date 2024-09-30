@@ -6,6 +6,9 @@ import java.awt.image.BufferedImage;
 
 public class ASCIIArtGUI extends JFrame {
     private BufferedImage image;
+    private String text = "ALPIAN"; // Teks yang akan dianimasikan
+    private int x = 10; // Posisi awal teks
+    private int direction = 1; // Arah gerakan teks
 
     public ASCIIArtGUI() {
         setTitle("ASCII Art");
@@ -16,7 +19,10 @@ public class ASCIIArtGUI extends JFrame {
         // Buat gambar buffered
         createImage();
 
-        // Override metode paint untuk menggambar gambar
+        // Mulai animasi
+        Timer timer = new Timer(50, e -> animateText());
+        timer.start();
+
         setVisible(true);
     }
 
@@ -29,7 +35,7 @@ public class ASCIIArtGUI extends JFrame {
         g.setFont(new Font("SanSerif", Font.BOLD, 24));
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2.drawString("ALPIAN", 10, 20);
+        g2.drawString(text, x, 20);
     }
 
     @Override
@@ -39,6 +45,20 @@ public class ASCIIArtGUI extends JFrame {
 
         // Menampilkan ASCII art di konsol
         displayASCIIArt();
+    }
+
+    private void animateText() {
+        // Update posisi teks
+        x += direction * 2; // Ganti 2 dengan kecepatan gerakan
+
+        // Ubah arah jika teks mencapai batas
+        if (x > image.getWidth() - 50 || x < 10) {
+            direction *= -1; // Balik arah
+        }
+
+        // Gambar ulang dengan posisi baru
+        createImage();
+        repaint();
     }
 
     private void displayASCIIArt() {
